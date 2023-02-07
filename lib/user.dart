@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:http/http.dart' as http;
 
 @immutable
 class UserModel {
@@ -55,6 +56,17 @@ class UserModel {
 
   @override
   int get hashCode => name.hashCode ^ email.hashCode;
+}
+
+final userRepositoryProvider = Provider((ref) => UserRepository());
+
+class UserRepository {
+  Future<UserModel> fetchUserData() {
+    const url = 'https://jsonplaceholder.typicode.com/users/1';
+    return http
+        .get(Uri.parse(url))
+        .then((value) => UserModel.fromJson(value.body));
+  }
 }
 
 @immutable
