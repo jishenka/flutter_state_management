@@ -4,6 +4,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'user.g.dart';
 
 @immutable
 class UserModel {
@@ -58,7 +61,9 @@ class UserModel {
   int get hashCode => name.hashCode ^ email.hashCode;
 }
 
-final userRepositoryProvider = Provider((ref) => UserRepository());
+// final userRepositoryProvider = Provider((ref) => UserRepository());
+@riverpod
+UserRepository userRepository(UserRepositoryRef ref) => UserRepository();
 
 class UserRepository {
   Future<UserModel> fetchUserData(String userId) {

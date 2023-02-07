@@ -1,11 +1,15 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'home.dart';
 import 'logger_riverpod.dart';
 import 'user.dart';
+
+part 'main.g.dart';
 
 extension CompactMap<T> on Iterable<T?> {
   Iterable<T> compactMap<E>([
@@ -27,6 +31,58 @@ void testIt() {
   });
 }
 
+@riverpod
+String name(NameRef ref) {
+  return 'Grushenka';
+}
+
+@riverpod
+Future<UserModel> fetchUser(
+  FetchUserRef ref, {
+  required String id,
+  required int num,
+  required bool flag,
+}) {
+  log('Init: fetchUser($id)');
+  ref.onCancel(() => log('Cancel: fetchUser($id)'));
+  ref.onResume(() => log('Resume: fetchUser($id)'));
+  ref.onDispose(() => log('Dispose: fetchUser($id)'));
+
+  final link = ref.keepAlive();
+  Timer? timer;
+
+  ref.onDispose(() => timer?.cancel());
+
+  ref.onCancel(() {
+    timer = Timer(const Duration(seconds: 10), () => link.close());
+  });
+
+  ref.onResume(() => timer?.cancel());
+
+  return ref.watch(userRepositoryProvider).fetchUserData(id);
+}
+
+// @riverpod
+// Future<UserModel> fetchUser(FetchUserRef ref, String id) {
+//   log('Init: fetchUser($id)');
+//   ref.onCancel(() => log('Cancel: fetchUser($id)'));
+//   ref.onResume(() => log('Resume: fetchUser($id)'));
+//   ref.onDispose(() => log('Dispose: fetchUser($id)'));
+
+//   final link = ref.keepAlive();
+//   Timer? timer;
+
+//   ref.onDispose(() => timer?.cancel());
+
+//   ref.onCancel(() {
+//     timer = Timer(const Duration(seconds: 10), () => link.close());
+//   });
+
+//   ref.onResume(() => timer?.cancel());
+
+//   return ref.watch(userRepositoryProvider).fetchUserData(id);
+// }
+
 final userProvider = StateNotifierProvider<UserNotifier, User>((ref) {
   return UserNotifier(const User(name: '', age: 0));
 });
@@ -34,25 +90,25 @@ final userProvider = StateNotifierProvider<UserNotifier, User>((ref) {
 final userChangeNotifierProvier =
     ChangeNotifierProvider((ref) => UserNotifierChange());
 
-final fetchUserProvider = FutureProvider.autoDispose.family((ref, String id) {
-  log('Init: fetchUser($id)');
-  // ref.onCancel(() => log('Cancel: fetchUser($id)'));
-  // ref.onResume(() => log('Resume: fetchUser($id)'));
-  // ref.onDispose(() => log('Dispose: fetchUser($id)'));
+// final fetchUserProvider = FutureProvider.autoDispose.family((ref, String id) {
+//   log('Init: fetchUser($id)');
+// ref.onCancel(() => log('Cancel: fetchUser($id)'));
+// ref.onResume(() => log('Resume: fetchUser($id)'));
+// ref.onDispose(() => log('Dispose: fetchUser($id)'));
 
-  // final link = ref.keepAlive();
-  // Timer? timer;
+// final link = ref.keepAlive();
+// Timer? timer;
 
-  // ref.onDispose(() => timer?.cancel());
+// ref.onDispose(() => timer?.cancel());
 
-  // ref.onCancel(() {
-  //   timer = Timer(const Duration(seconds: 10), () => link.close());
-  // });
+// ref.onCancel(() {
+//   timer = Timer(const Duration(seconds: 10), () => link.close());
+// });
 
-  // ref.onResume(() => timer?.cancel());
+// ref.onResume(() => timer?.cancel());
 
-  return ref.watch(userRepositoryProvider).fetchUserData(id);
-}, name: 'Future Provider');
+//   return ref.watch(userRepositoryProvider).fetchUserData(id);
+// }, name: 'Future Provider');
 
 // final streamProvider = StreamProvider((ref) {
 //   return Stream.periodic(const Duration(seconds: 1), (computationCnt) {
