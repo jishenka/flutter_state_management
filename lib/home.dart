@@ -20,20 +20,29 @@ class HomeScreen extends HookWidget {
           child: Consumer(
             builder: (context, ref, child) {
               final user = ref.watch(fetchUserProvider);
-              return user.when(
+              final streamNum = ref.watch(streamProvider);
+
+              return streamNum.when(
                 data: (data) {
-                  return Column(
-                    children: [
-                      Text(data.name),
-                      Text(data.email),
-                    ],
-                  );
+                  return Text(data.toString());
                 },
-                error: (err, stackTrace) {
-                  return Text(err.toString());
-                },
+                error: ((error, stackTrace) => Text(error.toString())),
                 loading: () => const CircularProgressIndicator(),
               );
+              // return user.when(
+              //   data: (data) {
+              //     return Column(
+              //       children: [
+              //         Text(data.name),
+              //         Text(data.email),
+              //       ],
+              //     );
+              //   },
+              //   error: (err, stackTrace) {
+              //     return Text(err.toString());
+              //   },
+              //   loading: () => const CircularProgressIndicator(),
+              // );
               // final user = ref.watch(userChangeNotifierProvier).user =
               //     const User(name: '', age: 0);
 

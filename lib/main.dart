@@ -35,6 +35,12 @@ final fetchUserProvider = FutureProvider((ref) {
   return ref.watch(userRepositoryProvider).fetchUserData();
 });
 
+final streamProvider = StreamProvider((ref) {
+  return Stream.periodic(const Duration(seconds: 1), (computationCnt) {
+    return computationCnt;
+  });
+});
+
 void main() => runApp(
       const ProviderScope(
         child: App(),
