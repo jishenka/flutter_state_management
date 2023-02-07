@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'main.dart';
+import 'user.dart';
 
 class HomeScreen extends HookWidget {
   const HomeScreen({super.key});
@@ -19,8 +20,8 @@ class HomeScreen extends HookWidget {
         child: Center(
           child: Consumer(
             builder: (context, ref, child) {
-              final user =
-                  ref.watch(userProvider.select((value) => value.name));
+              final user = ref.watch(userChangeNotifierProvier).user =
+                  const User(name: '', age: 0);
 
               ref.listen(userProvider.select((value) => value.age),
                   ((prevState, currState) {
@@ -41,18 +42,18 @@ class HomeScreen extends HookWidget {
                   TextField(
                     controller: controller1,
                     onSubmitted: (value) {
-                      ref.read(userProvider.notifier).updateName(value);
+                      ref.read(userChangeNotifierProvier).updateName(value);
                     },
                   ),
                   TextField(
                     controller: controller2,
                     onSubmitted: (value) {
                       ref
-                          .read(userProvider.notifier)
+                          .read(userChangeNotifierProvier)
                           .updateAge(int.parse(value));
                     },
                   ),
-                  Text(user)
+                  Text(user.name),
                 ],
               );
             },

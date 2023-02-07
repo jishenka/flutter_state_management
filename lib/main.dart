@@ -28,6 +28,9 @@ final userProvider = StateNotifierProvider<UserNotifier, User>((ref) {
   return UserNotifier(const User(name: '', age: 0));
 });
 
+final userChangeNotifierProvier =
+    ChangeNotifierProvider((ref) => UserNotifierChange());
+
 void main() => runApp(
       const ProviderScope(
         child: App(),
