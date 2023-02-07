@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -32,7 +35,22 @@ final userChangeNotifierProvier =
     ChangeNotifierProvider((ref) => UserNotifierChange());
 
 final fetchUserProvider = FutureProvider.autoDispose.family((ref, String id) {
-  ref.keepAlive();
+  log('Init: fetchUser($id)');
+  ref.onCancel(() => log('Cancel: fetchUser($id)'));
+  ref.onResume(() => log('Resume: fetchUser($id)'));
+  ref.onDispose(() => log('Dispose: fetchUser($id)'));
+
+  final link = ref.keepAlive();
+  Timer? timer;
+
+  ref.onDispose(() => timer?.cancel());
+
+  ref.onCancel(() {
+    timer = Timer(const Duration(seconds: 10), () => link.close());
+  });
+
+  ref.onResume(() => timer?.cancel());
+
   return ref.watch(userRepositoryProvider).fetchUserData(id);
 });
 
