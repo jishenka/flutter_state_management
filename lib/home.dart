@@ -21,7 +21,7 @@ class HomeScreen extends HookWidget {
           child: Consumer(
             builder: (context, ref, child) {
               final user = ref.watch(fetchUserProvider(userId));
-              final streamNum = ref.watch(streamProvider);
+              // final streamNum = ref.watch(streamProvider);
 
               // return user.when(
               //   data: (data) {
