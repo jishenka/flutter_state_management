@@ -10,6 +10,7 @@ class HomeScreen extends HookWidget {
   Widget build(BuildContext context) {
     final controller1 = useTextEditingController();
     final controller2 = useTextEditingController();
+    var userId = '1';
 
     return Scaffold(
       appBar: AppBar(
@@ -19,16 +20,9 @@ class HomeScreen extends HookWidget {
         child: Center(
           child: Consumer(
             builder: (context, ref, child) {
-              final user = ref.watch(fetchUserProvider);
+              final user = ref.watch(fetchUserProvider(userId));
               final streamNum = ref.watch(streamProvider);
 
-              return streamNum.when(
-                data: (data) {
-                  return Text(data.toString());
-                },
-                error: ((error, stackTrace) => Text(error.toString())),
-                loading: () => const CircularProgressIndicator(),
-              );
               // return user.when(
               //   data: (data) {
               //     return Column(
@@ -54,25 +48,21 @@ class HomeScreen extends HookWidget {
               //   ));
               // }));
 
-              // return Column(
-              //   children: [
-              //     TextField(
-              //       controller: controller1,
-              //       onSubmitted: (value) {
-              //         ref.read(userChangeNotifierProvier).updateName(value);
-              //       },
-              //     ),
-              //     TextField(
-              //       controller: controller2,
-              //       onSubmitted: (value) {
-              //         ref
-              //             .read(userChangeNotifierProvier)
-              //             .updateAge(int.parse(value));
-              //       },
-              //     ),
-              //     Text(user.name),
-              //   ],
-              // );
+              return user.when(
+                data: (data) => Column(
+                  children: [
+                    TextField(
+                      controller: controller1,
+                      onSubmitted: (value) {
+                        userId = value;
+                      },
+                    ),
+                    Text(data.name),
+                  ],
+                ),
+                error: (error, stackTrace) => Text(error.toString()),
+                loading: () => const CircularProgressIndicator(),
+              );
             },
           ),
         ),

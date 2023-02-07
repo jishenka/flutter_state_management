@@ -31,8 +31,9 @@ final userProvider = StateNotifierProvider<UserNotifier, User>((ref) {
 final userChangeNotifierProvier =
     ChangeNotifierProvider((ref) => UserNotifierChange());
 
-final fetchUserProvider = FutureProvider((ref) {
-  return ref.watch(userRepositoryProvider).fetchUserData();
+final fetchUserProvider = FutureProvider.autoDispose.family((ref, String id) {
+  ref.keepAlive();
+  return ref.watch(userRepositoryProvider).fetchUserData(id);
 });
 
 final streamProvider = StreamProvider((ref) {
