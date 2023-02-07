@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:http/http.dart' as http;
 
 import 'home.dart';
 import 'user.dart';
@@ -30,6 +31,13 @@ final userProvider = StateNotifierProvider<UserNotifier, User>((ref) {
 
 final userChangeNotifierProvier =
     ChangeNotifierProvider((ref) => UserNotifierChange());
+
+final fetchUserProvider = FutureProvider((ref) {
+  const url = 'https://jsonplaceholder.typicode.com/users/1';
+  return http
+      .get(Uri.parse(url))
+      .then((value) => UserModel.fromJson(value.body));
+});
 
 void main() => runApp(
       const ProviderScope(
