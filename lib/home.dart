@@ -61,7 +61,7 @@ class HomeScreen extends HookWidget {
                         userId = value;
                       },
                     ),
-                    Text(data.name),
+                    Text(data != null ? data.name : ''),
                   ],
                 ),
                 error: (error, stackTrace) => Text(error.toString()),

@@ -39,10 +39,10 @@ final nameProvider = AutoDisposeProvider<String>(
       const bool.fromEnvironment('dart.vm.product') ? null : _$nameHash,
 );
 typedef NameRef = AutoDisposeProviderRef<String>;
-String _$fetchUserHash() => r'7a59a8c9047184e80a207a6fb6c0f24e9278e040';
+String _$fetchUserHash() => r'acbef4d2ffe7e3117ba759976fbf7294a6d88fbd';
 
 /// See also [fetchUser].
-class FetchUserProvider extends AutoDisposeFutureProvider<UserModel> {
+class FetchUserProvider extends AutoDisposeFutureProvider<UserModel?> {
   FetchUserProvider({
     required this.id,
     required this.num,
@@ -85,12 +85,12 @@ class FetchUserProvider extends AutoDisposeFutureProvider<UserModel> {
   }
 }
 
-typedef FetchUserRef = AutoDisposeFutureProviderRef<UserModel>;
+typedef FetchUserRef = AutoDisposeFutureProviderRef<UserModel?>;
 
 /// See also [fetchUser].
 final fetchUserProvider = FetchUserFamily();
 
-class FetchUserFamily extends Family<AsyncValue<UserModel>> {
+class FetchUserFamily extends Family<AsyncValue<UserModel?>> {
   FetchUserFamily();
 
   FetchUserProvider call({
@@ -106,7 +106,7 @@ class FetchUserFamily extends Family<AsyncValue<UserModel>> {
   }
 
   @override
-  AutoDisposeFutureProvider<UserModel> getProviderOverride(
+  AutoDisposeFutureProvider<UserModel?> getProviderOverride(
     covariant FetchUserProvider provider,
   ) {
     return call(

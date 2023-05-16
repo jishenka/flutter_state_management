@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'home.dart';
+import 'loading.dart';
 import 'logger_riverpod.dart';
 import 'user.dart';
 
@@ -37,7 +37,7 @@ String name(NameRef ref) {
 }
 
 @riverpod
-Future<UserModel> fetchUser(
+Future<UserModel?> fetchUser(
   FetchUserRef ref, {
   required String id,
   required int num,
@@ -135,7 +135,7 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.purple,
       ),
-      home: const HomeScreen(),
+      home: const LoadingScreen(),
     );
   }
 }

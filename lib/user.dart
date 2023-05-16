@@ -66,7 +66,7 @@ class UserModel {
 UserRepository userRepository(UserRepositoryRef ref) => UserRepository();
 
 class UserRepository {
-  Future<UserModel> fetchUserData(String userId) {
+  Future<UserModel?> fetchUserData(String userId) {
     final url = 'https://jsonplaceholder.typicode.com/users/$userId';
     return http
         .get(Uri.parse(url))
